@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: lumaCourses
+  datasource:
+    url: jdbc:postgresql://localhost:5432/lumacourses_v1
+    username: your_database_username
+    password: your_database_password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+app:
+  jwt:
+    # CHANGE THIS IN PRODUCTION: base64-encoded 512-bit random secret
+    secret: your_base64_encoded_512bit_secret_key_here
+    access-token-expiry-ms: 900000      # 15 minutes
+    refresh-token-expiry-ms: 604800000  # 7 days
