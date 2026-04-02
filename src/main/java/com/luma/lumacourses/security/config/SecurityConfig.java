@@ -32,8 +32,6 @@ public class SecurityConfig {
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
@@ -52,38 +50,40 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    //  Filter chain
+    // Filter chain
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // Stateless
-            .csrf(AbstractHttpConfigurer::disable)
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // Stateless
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-            // Custom JSON error responses
-            .exceptionHandling(ex -> ex
-                .authenticationEntryPoint(jwtAuthEntryPoint)
-                .accessDeniedHandler(jwtAccessDeniedHandler))
+                // Custom JSON error responses
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(jwtAuthEntryPoint)
+                        .accessDeniedHandler(jwtAccessDeniedHandler))
 
-            // authorization
-            .authorizeHttpRequests(auth -> auth
-                // Auth endpoint
-                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/auth/verify").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
-                // Swagger UI
-                .requestMatchers(
-                    "/swagger-ui/**",
-                    "/swagger-ui.html",
-                    "/v3/api-docs/**"
-                ).permitAll()
-                // Everything requires a valid access token
-                .anyRequest().authenticated())
+                // authorization
+                .authorizeHttpRequests(auth -> auth
+                        // Auth endpoint
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/verify").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
+                        // Public user registration
+                        .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
+                        // Swagger UI
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**")
+                        .permitAll()
+                        // Everything requires a valid access token; @PreAuthorize handles fine-grained
+                        // role checks
+                        .anyRequest().authenticated())
 
-            .authenticationProvider(authenticationProvider())
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

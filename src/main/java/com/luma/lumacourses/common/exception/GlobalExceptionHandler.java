@@ -27,109 +27,116 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    //  Validate
+        // Validate
 
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request) {
-        List<ValidationError> errors = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(this::toValidationError)
-                .toList();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error("Validation failed", errors));
-    }
+        @Override
+        protected ResponseEntity<Object> handleMethodArgumentNotValid(
+                        MethodArgumentNotValidException ex,
+                        HttpHeaders headers,
+                        HttpStatusCode status,
+                        WebRequest request) {
+                List<ValidationError> errors = ex.getBindingResult()
+                                .getFieldErrors()
+                                .stream()
+                                .map(this::toValidationError)
+                                .toList();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(ApiResponse.error("Validation failed", errors));
+        }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ApiResponse<Void>> handleConstraintViolation(ConstraintViolationException ex) {
-        List<ValidationError> errors = ex.getConstraintViolations()
-                .stream()
-                .map(this::toValidationError)
-                .toList();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error("Validation failed", errors));
-    }
+        @ExceptionHandler(ConstraintViolationException.class)
+        public ResponseEntity<ApiResponse<Void>> handleConstraintViolation(ConstraintViolationException ex) {
+                List<ValidationError> errors = ex.getConstraintViolations()
+                                .stream()
+                                .map(this::toValidationError)
+                                .toList();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(ApiResponse.error("Validation failed", errors));
+        }
 
-    //  Auth
+        // Auth
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ApiResponse<Void>> handleBadCredentials(BadCredentialsException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ApiResponse.error("Invalid email or password", null));
-    }
+        @ExceptionHandler(BadCredentialsException.class)
+        public ResponseEntity<ApiResponse<Void>> handleBadCredentials(BadCredentialsException ex) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                .body(ApiResponse.error("Invalid email or password", null));
+        }
 
-    @ExceptionHandler(DisabledException.class)
-    public ResponseEntity<ApiResponse<Void>> handleDisabled(DisabledException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(ApiResponse.error("Account is disabled. Please contact support.", null));
-    }
+        @ExceptionHandler(DisabledException.class)
+        public ResponseEntity<ApiResponse<Void>> handleDisabled(DisabledException ex) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                                .body(ApiResponse.error("Account is disabled. Please contact support.", null));
+        }
 
-    @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<ApiResponse<Void>> handleInvalidToken(InvalidTokenException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ApiResponse.error(ex.getMessage(), null));
-    }
+        @ExceptionHandler(InvalidTokenException.class)
+        public ResponseEntity<ApiResponse<Void>> handleInvalidToken(InvalidTokenException ex) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                .body(ApiResponse.error(ex.getMessage(), null));
+        }
 
-    @ExceptionHandler(AccountDisabledException.class)
-    public ResponseEntity<ApiResponse<Void>> handleAccountDisabled(AccountDisabledException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(ApiResponse.error(ex.getMessage(), null));
-    }
+        @ExceptionHandler(AccountDisabledException.class)
+        public ResponseEntity<ApiResponse<Void>> handleAccountDisabled(AccountDisabledException ex) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                                .body(ApiResponse.error(ex.getMessage(), null));
+        }
 
-    @ExceptionHandler(JwtException.class)
-    public ResponseEntity<ApiResponse<Void>> handleJwtException(JwtException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ApiResponse.error("Invalid or expired token", null));
-    }
+        @ExceptionHandler(JwtException.class)
+        public ResponseEntity<ApiResponse<Void>> handleJwtException(JwtException ex) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                .body(ApiResponse.error("Invalid or expired token", null));
+        }
 
-    /*  Authentication exception  */
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ApiResponse<Void>> handleAuthentication(AuthenticationException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ApiResponse.error("Unauthorized", null));
-    }
+        /* Authentication exception */
+        @ExceptionHandler(AuthenticationException.class)
+        public ResponseEntity<ApiResponse<Void>> handleAuthentication(AuthenticationException ex) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                .body(ApiResponse.error("Unauthorized", null));
+        }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiResponse<Void>> handleAccessDenied(AccessDeniedException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(ApiResponse.error("Forbidden", null));
-    }
+        @ExceptionHandler(AccessDeniedException.class)
+        public ResponseEntity<ApiResponse<Void>> handleAccessDenied(AccessDeniedException ex) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                                .body(ApiResponse.error("Forbidden", null));
+        }
 
-    // Domain
+        // Domain
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ApiResponse<Void>> handleNotFound(EntityNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(ApiResponse.error(ex.getMessage(), null));
-    }
+        @ExceptionHandler(EntityNotFoundException.class)
+        public ResponseEntity<ApiResponse<Void>> handleNotFound(EntityNotFoundException ex) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                .body(ApiResponse.error(ex.getMessage(), null));
+        }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ApiResponse<Void>> handleConflict(DataIntegrityViolationException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(ApiResponse.error("Conflict: data integrity violation", null));
-    }
+        @ExceptionHandler(ConflictException.class)
+        public ResponseEntity<ApiResponse<Void>> handleConflictException(ConflictException ex) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                                .body(ApiResponse.error(ex.getMessage(), null));
+        }
 
-    // server errror
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleGeneric(Exception ex) {
-        logger.error("Unhandled exception", ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error("Internal server error", null));
-    }
+        @ExceptionHandler(DataIntegrityViolationException.class)
+        public ResponseEntity<ApiResponse<Void>> handleConflict(DataIntegrityViolationException ex) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                                .body(ApiResponse.error("Conflict: data integrity violation", null));
+        }
 
-    // ─Helpers
+        // server errror
+        @ExceptionHandler(Exception.class)
+        public ResponseEntity<ApiResponse<Void>> handleGeneric(Exception ex) {
+                logger.error("Unhandled exception", ex);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                .body(ApiResponse.error("Internal server error", null));
+        }
 
-    private ValidationError toValidationError(FieldError error) {
-        return new ValidationError(error.getField(), error.getDefaultMessage());
-    }
+        // ─Helpers
 
-    private ValidationError toValidationError(ConstraintViolation<?> violation) {
-        String field = violation.getPropertyPath() != null
-                ? violation.getPropertyPath().toString() : null;
-        return new ValidationError(field, violation.getMessage());
-    }
+        private ValidationError toValidationError(FieldError error) {
+                return new ValidationError(error.getField(), error.getDefaultMessage());
+        }
+
+        private ValidationError toValidationError(ConstraintViolation<?> violation) {
+                String field = violation.getPropertyPath() != null
+                                ? violation.getPropertyPath().toString()
+                                : null;
+                return new ValidationError(field, violation.getMessage());
+        }
 }
