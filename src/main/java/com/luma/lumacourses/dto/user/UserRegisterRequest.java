@@ -1,6 +1,6 @@
 package com.luma.lumacourses.dto.user;
 
-import com.luma.lumacourses.common.enums.Role;
+import com.luma.lumacourses.util.enums.Role;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 /**
- * Public registration request.
  * Only STUDENT and TEACHER roles are allowed.
  */
 public record UserRegisterRequest(

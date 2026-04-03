@@ -1,4 +1,4 @@
-package com.luma.lumacourses.dto;
+package com.luma.lumacourses.dto.common;
 
 import java.util.List;
 

@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 /**
- * Used by OWNER or ADMIN to change a user's password.
+ *
  * PUT /api/users/{user_id}/password
  */
 public record PasswordChangeRequest(
