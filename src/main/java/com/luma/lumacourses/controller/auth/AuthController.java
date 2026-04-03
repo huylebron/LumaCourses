@@ -1,7 +1,7 @@
-package com.luma.lumacourses.controller;
+package com.luma.lumacourses.controller.auth;
 
-import com.luma.lumacourses.dto.ApiResponse;
 import com.luma.lumacourses.dto.auth.*;
+import com.luma.lumacourses.dto.common.ApiResponse;
 import com.luma.lumacourses.security.principal.UserPrincipal;
 import com.luma.lumacourses.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,8 +22,7 @@ public class AuthController {
     private final AuthService authService;
 
     /**
-     * POST /api/auth/login — public
-     * Authenticate with email + password, access + refresh tokens.
+     * POST /api/auth/login
      */
     @PostMapping("/login")
     @Operation(summary = "Login", description = "Authenticate and receive JWT access + refresh tokens")
@@ -34,8 +33,8 @@ public class AuthController {
     }
 
     /**
-     * POST /api/auth/verify — public
-     * validate access token and return claims
+     * POST /api/auth/verify
+     *
      */
     @PostMapping("/verify")
     @Operation(summary = "Verify token", description = "Check token validation and return  claims")
@@ -46,8 +45,8 @@ public class AuthController {
     }
 
     /**
-     * GET /api/auth/me — authenticated
-     * Return user profile
+     * GET /api/auth/me
+     * R
      */
     @GetMapping("/me")
     @SecurityRequirement(name = "bearerAuth")
@@ -59,7 +58,7 @@ public class AuthController {
     }
 
     /**
-     * POST /api/auth/logout — authenticated
+     * POST /api/auth/logout
      * blacklist token and revoke token
      */
     @PostMapping("/logout")
@@ -74,7 +73,7 @@ public class AuthController {
     }
 
     /**
-     * POST /api/auth/refresh — public
+     * POST /api/auth/refresh
      *
      */
     @PostMapping("/refresh")

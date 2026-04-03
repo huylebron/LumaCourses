@@ -5,22 +5,22 @@ import io.jsonwebtoken.Claims;
 
 public interface JwtService {
 
-    /** Generate  access token (15 min) */
+    /** Generate  access token 15p*/
     String generateAccessToken(UserPrincipal principal);
 
-    /** Generate long refresh token (7 days).*/
+    /** Generate long refresh token 7 days.*/
     String generateRefreshToken(UserPrincipal principal);
 
     /** Validate signature + expired */
     boolean validateToken(String token);
 
-    /** Parse and return all claims */
+
     Claims extractAllClaims(String token);
 
-    /** Extract jti (JWT ID) claim */
+    /** Extract jwt id  */
     String extractJti(String token);
 
-    /** Extract subject as Long userId */
+    /** Extract user id */
     Long extractUserId(String token);
 
     /** Check if the access token JTI exists in the token_blacklist table */

@@ -66,7 +66,7 @@ public class SecurityConfig {
 
                 // authorization
                 .authorizeHttpRequests(auth -> auth
-                        // Auth endpoint
+
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/verify").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
@@ -78,7 +78,7 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**")
                         .permitAll()
-                        // Everything requires a valid access token; @PreAuthorize handles fine-grained
+                        // Everything requires a valid access token
                         // role checks
                         .anyRequest().authenticated())
 

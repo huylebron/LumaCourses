@@ -12,10 +12,10 @@ import java.util.Optional;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
 
-    /** UUID embedded  */
+    /** UUID */
     Optional<RefreshToken> findByJti(String jti);
 
-    /** Look up by SHA-256 hash  */
+    /**  SHA-256 hash  */
     Optional<RefreshToken> findByToken(String tokenHash);
 
     /** Revoke ALL refresh tokens */

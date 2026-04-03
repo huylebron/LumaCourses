@@ -1,7 +1,7 @@
 package com.luma.lumacourses.service.impl;
 
-import com.luma.lumacourses.common.exception.AccountDisabledException;
-import com.luma.lumacourses.common.exception.InvalidTokenException;
+import com.luma.lumacourses.util.exception.AccountDisabledException;
+import com.luma.lumacourses.util.exception.InvalidTokenException;
 import com.luma.lumacourses.dto.auth.*;
 import com.luma.lumacourses.entity.RefreshToken;
 import com.luma.lumacourses.entity.TokenBlacklist;

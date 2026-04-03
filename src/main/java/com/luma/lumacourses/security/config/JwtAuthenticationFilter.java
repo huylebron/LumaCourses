@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(token) && jwtService.validateToken(token)) {
                 Claims claims = jwtService.extractAllClaims(token);
 
-                // Only allow access tokens through this filter
+
                 String tokenType = claims.get("type", String.class);
                 if (!"access".equals(tokenType)) {
                     log.warn("Refresh token used as access token on path: {}", request.getRequestURI());
@@ -46,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     return;
                 }
 
-                // Check JTI blacklist (logout)
+                // Check  logout token
                 String jti = claims.getId();
                 if (jwtService.isTokenBlacklisted(jti)) {
                     log.warn("Blacklisted JTI used: {} on path: {}", jti, request.getRequestURI());
