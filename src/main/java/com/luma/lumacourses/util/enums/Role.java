@@ -1,4 +1,4 @@
-package com.luma.lumacourses.common.enums;
+package com.luma.lumacourses.util.enums;
 
 public enum Role {
     ADMIN,

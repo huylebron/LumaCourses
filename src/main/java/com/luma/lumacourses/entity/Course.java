@@ -1,6 +1,6 @@
 package com.luma.lumacourses.entity;
 
-import com.luma.lumacourses.common.enums.CourseStatus;
+import com.luma.lumacourses.util.enums.CourseStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

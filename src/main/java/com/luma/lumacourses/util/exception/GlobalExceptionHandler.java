@@ -1,7 +1,7 @@
-package com.luma.lumacourses.common.exception;
+package com.luma.lumacourses.util.exception;
 
-import com.luma.lumacourses.dto.ApiResponse;
-import com.luma.lumacourses.dto.ValidationError;
+import com.luma.lumacourses.dto.common.ApiResponse;
+import com.luma.lumacourses.dto.common.ValidationError;
 import io.jsonwebtoken.JwtException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
