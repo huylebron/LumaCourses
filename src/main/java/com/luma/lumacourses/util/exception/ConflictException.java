@@ -1,4 +1,4 @@
-package com.luma.lumacourses.common.exception;
+package com.luma.lumacourses.util.exception;
 
 /**
  * Thrown when a unique constraint would be violated (e.g. duplicate

@@ -1,4 +1,4 @@
-package com.luma.lumacourses.common.exception;
+package com.luma.lumacourses.util.exception;
 
 public class AccountDisabledException extends RuntimeException {
     public AccountDisabledException(String message) {
