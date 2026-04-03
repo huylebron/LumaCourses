@@ -1,12 +1,11 @@
 package com.luma.lumacourses.service.impl;
 
-import com.luma.lumacourses.common.enums.Role;
-import com.luma.lumacourses.common.exception.ConflictException;
+import com.luma.lumacourses.util.enums.Role;
+import com.luma.lumacourses.util.exception.ConflictException;
 import com.luma.lumacourses.dto.user.*;
 import com.luma.lumacourses.entity.User;
 import com.luma.lumacourses.mapper.UserMapper;
 import com.luma.lumacourses.repository.UserRepository;
-import com.luma.lumacourses.repository.UserSpecification;
 import com.luma.lumacourses.security.principal.UserPrincipal;
 import com.luma.lumacourses.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -14,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,7 +27,9 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // ─── List ─────────────────────────────────────────────────────────────────
+    // List
+
+
 
     @Override
     public UserResponse registerUser(UserRegisterRequest request) {
@@ -42,16 +42,14 @@ public class UserServiceImpl implements UserService {
                 true);
     }
 
+
     @Override
     @Transactional(readOnly = true)
     public Page<UserResponse> listUsers(Role role, Boolean active, Pageable pageable) {
-        Specification<User> spec = Specification
-                .where(UserSpecification.hasRole(role))
-                .and(UserSpecification.isActive(active));
-        return userRepository.findAll(spec, pageable).map(UserMapper::toResponse);
+        return userRepository.findAllByFilters(role, active, pageable).map(UserMapper::toResponse);
     }
 
-    // ─── Get by ID ────────────────────────────────────────────────────────────
+    // Get by ID ─
 
     @Override
     @Transactional(readOnly = true)
@@ -60,7 +58,7 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toResponse(user);
     }
 
-    // ─── Create (ADMIN) ───────────────────────────────────────────────────────
+    // Create ─
 
     @Override
     public UserResponse createUser(UserCreateRequest request) {
@@ -73,7 +71,8 @@ public class UserServiceImpl implements UserService {
                 false);
     }
 
-    // ─── Update Profile (OWNER_OR_ADMIN) ──────────────────────────────────────
+
+
 
     @Override
     public UserResponse updateProfile(Long id, UserUpdateRequest request, UserPrincipal principal) {
@@ -99,7 +98,7 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toResponse(userRepository.save(user));
     }
 
-    // ─── Change Password (OWNER_OR_ADMIN) ─────────────────────────────────────
+   //
 
     @Override
     public void changePassword(Long id, PasswordChangeRequest request, UserPrincipal principal) {

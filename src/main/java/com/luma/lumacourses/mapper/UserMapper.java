@@ -3,9 +3,7 @@ package com.luma.lumacourses.mapper;
 import com.luma.lumacourses.dto.user.UserResponse;
 import com.luma.lumacourses.entity.User;
 
-/**
- * Static mapper — converts {@link User} entity to {@link UserResponse} DTO.
- */
+
 public final class UserMapper {
 
     private UserMapper() {

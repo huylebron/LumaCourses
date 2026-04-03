@@ -1,9 +1,9 @@
-package com.luma.lumacourses.controller;
+package com.luma.lumacourses.controller.user;
 
-import com.luma.lumacourses.common.enums.Role;
-import com.luma.lumacourses.dto.ApiResponse;
-import com.luma.lumacourses.dto.PagedData;
-import com.luma.lumacourses.dto.PaginationMeta;
+import com.luma.lumacourses.dto.common.ApiResponse;
+import com.luma.lumacourses.util.enums.Role;
+import com.luma.lumacourses.dto.common.PagedData;
+import com.luma.lumacourses.dto.common.PaginationMeta;
 import com.luma.lumacourses.dto.user.*;
 import com.luma.lumacourses.security.principal.UserPrincipal;
 import com.luma.lumacourses.service.UserService;
@@ -34,15 +34,11 @@ public class UserController {
 
     private final UserService userService;
 
-    // ─── GET /api/users ───────────────────────────────────────────────────────
 
     /**
-     * GET /api/users — ADMIN only
-     * Supports optional query params: role, active, page, size
+     * GET /api/users — ADMIN
+     *  query params: role, active, page, size
      *
-     * TC-U1: ADMIN lists all users → 200 page result
-     * TC-U2: ADMIN filters by role=TEACHER → only teachers returned
-     * TC-U3: Non-admin token → 403 Forbidden
      */
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -74,13 +70,7 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success(new PagedData<>(result.getContent(), meta), "Users retrieved"));
     }
 
-    // ─── GET /api/users/{user_id} ─────────────────────────────────────────────
-
-    /**
-     * TC-U4: ADMIN gets existing user → 200 with user data
-     * TC-U5: ADMIN gets non-existent user → 404 Not Found
-     * TC-U6: Non-admin token → 403 Forbidden
-     */
+    //  GET /api/users/{user_id}
     @GetMapping("/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Get user by ID (ADMIN)", description = "Returns full user details for the specified user ID.")
@@ -94,13 +84,8 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success(userService.getUserById(userId), "User retrieved"));
     }
 
-    // ─── POST /api/users/register ─────────────────────────────────────────────
+    // POST /api/users/register
 
-    /**
-     * TC-U7: PUBLIC registers STUDENT → 201, active=true
-     * TC-U8: PUBLIC registers TEACHER → 201, active=false (pending approval)
-     * TC-U9: Duplicate email → 409 Conflict
-     */
     @PostMapping("/register")
     @Operation(summary = "Public register", description = "Public registration for STUDENT and TEACHER. TEACHER accounts start as `active=false` pending admin approval.", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(examples = {
             @ExampleObject(name = "Register STUDENT", value = "{\"username\":\"john_doe\",\"email\":\"john@example.com\",\"password\":\"secret123\",\"fullName\":\"John Doe\",\"role\":\"STUDENT\"}"),
@@ -118,13 +103,9 @@ public class UserController {
                 .body(ApiResponse.success(created, "User registered successfully"));
     }
 
-    // ─── PUT /api/users/{user_id} ─────────────────────────────────────────────
+    //  PUT /api/users/{user_id
 
-    /**
-     * TC-U10: Owner updates own fullName → 200 updated
-     * TC-U11: ADMIN updates another user → 200 updated
-     * TC-U12: User tries to update another user's profile → 403
-     */
+
     @PutMapping("/{userId}")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Update user profile (OWNER or ADMIN)", description = "Update profile fields (username, email, fullName). Only non-null fields are applied. Owner or ADMIN only.")
@@ -141,14 +122,9 @@ public class UserController {
                 userService.updateProfile(userId, request, principal), "Profile updated"));
     }
 
-    // ─── PUT /api/users/{user_id}/password ───────────────────────────────────
+    // PUT /api/users/{user_id}/password
 
-    /**
-     * TC-U13: Owner provides correct currentPassword → 200 OK
-     * TC-U14: Owner provides wrong currentPassword → 403
-     * TC-U15: ADMIN changes another user's password (no currentPassword check) →
-     * 200
-     */
+
     @PutMapping("/{userId}/password")
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Change password (OWNER or ADMIN)", description = "Change the user's password. When the owner calls this endpoint, `currentPassword` is verified. ADMIN can bypass the current password check.")
@@ -165,16 +141,10 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success(null, "Password changed successfully"));
     }
 
-    // ─── PUT /api/users/{user_id}/role ────────────────────────────────────────
-
-    /**
-     * TC-U16: ADMIN changes STUDENT → TEACHER → 200
-     * TC-U17: ADMIN tries to change another ADMIN's role → 403
-     * TC-U18: Non-admin token → 403
-     */
+    // PUT /api/users/{user_id}/role
     @PutMapping("/{userId}/role")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Change user role (ADMIN)", description = "Update a user's role. An ADMIN is not permitted to change the role of another ADMIN user.")
+    @Operation(summary = "Change user role (ADMIN)", description = "Update a user's role")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "TC-U16: Role updated successfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "TC-U17: Attempting to change another ADMIN's role"),
@@ -188,13 +158,9 @@ public class UserController {
                 userService.updateRole(userId, request, principal), "Role updated"));
     }
 
-    // ─── PUT /api/users/{user_id}/status ──────────────────────────────────────
+    // PUT /api/users/{user_id}/status
 
-    /**
-     * TC-U19: ADMIN disables active user → 200, active=false
-     * TC-U20: ADMIN enables inactive user → 200, active=true
-     * TC-U21: Non-admin token → 403
-     */
+
     @PutMapping("/{userId}/status")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Enable/disable user (ADMIN)", description = "Toggle the `is_active` flag of a user account.")
@@ -210,16 +176,11 @@ public class UserController {
                 userService.updateStatus(userId, request), "User status updated"));
     }
 
-    // ─── DELETE /api/users/{user_id} ──────────────────────────────────────────
+    // DELETE /api/users/{user_id}
 
-    /**
-     * TC-U22: ADMIN deletes existing user → 200, user active=false
-     * TC-U23: ADMIN deletes non-existent user → 404
-     * TC-U24: Non-admin token → 403
-     */
     @DeleteMapping("/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Delete user (ADMIN, soft delete)", description = "Soft-deletes a user by setting `is_active = false`. The user record is retained in the database.")
+    @Operation(summary = "Delete user (ADMIN, soft delete)", description = "Soft-delele account users ")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "TC-U22: User soft-deleted"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "TC-U23: User not found"),

@@ -1,6 +1,6 @@
 package com.luma.lumacourses.security.principal;
 
-import com.luma.lumacourses.common.enums.Role;
+import com.luma.lumacourses.util.enums.Role;
 import com.luma.lumacourses.entity.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
