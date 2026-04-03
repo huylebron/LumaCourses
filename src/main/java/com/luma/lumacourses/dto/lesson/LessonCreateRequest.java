@@ -8,15 +8,15 @@ import jakarta.validation.constraints.Size;
 public record LessonCreateRequest(
 
         @NotBlank(message = "Title is required")
-        @Size(max = 255, message = "Title must not exceed 255 characters")
+        @Size(max = 255, message = "Title 255 characters")
         String title,
 
-        @Size(max = 500, message = "Content URL must not exceed 500 characters")
+        @Size(max = 500, message = "Content URL  500 characters")
         String contentUrl,
 
         String textContent,
 
         @NotNull(message = "Order index is required")
-        @Min(value = 1, message = "Order index must be greater than or equal to 1")
+        @Min(value = 1, message = "Order index > 1")
         Integer orderIndex) {
 }

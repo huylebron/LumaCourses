@@ -11,18 +11,18 @@ import java.math.BigDecimal;
 public record CourseCreateRequest(
 
         @NotBlank(message = "Title is required")
-        @Size(max = 255, message = "Title must not exceed 255 characters")
+        @Size(max = 255, message = "Title 255 characters")
         String title,
 
         String description,
 
-        @NotNull(message = "Teacher id is required")
+        @NotNull(message = "Teacher id required")
         Long teacherId,
 
         @NotNull(message = "Price is required")
-        @DecimalMin(value = "0.0", inclusive = true, message = "Price must be greater than or equal to 0")
+        @DecimalMin(value = "0.0", inclusive = true, message = "Price > 0")
         BigDecimal price,
 
-        @Min(value = 0, message = "Duration hours must be greater than or equal to 0")
+        @Min(value = 0, message = "Duration hours >  to 0")
         Integer durationHours) {
 }

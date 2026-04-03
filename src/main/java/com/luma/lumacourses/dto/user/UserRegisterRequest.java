@@ -17,21 +17,21 @@ public record UserRegisterRequest(
         String username,
 
         @NotBlank(message = "Email is required")
-        @Email(message = "Email must be valid")
+        @Email(message = "Email  valid")
         String email,
 
         @NotBlank(message = "Password is required")
-        @Size(min = 8, message = "Password must be at least 8 characters")
+        @Size(min = 8, message = "Password  8 characters")
         String password,
 
         @NotBlank(message = "Full name is required")
-        @Size(max = 100, message = "Full name must not exceed 100 characters")
+        @Size(max = 100, message = "Full name  100 characters")
         String fullName,
 
         @NotNull(message = "Role is required")
         Role role) {
 
-    @AssertTrue(message = "Role must be STUDENT or TEACHER for public registration")
+    @AssertTrue(message = "Role STUDENT or TEACHER for public register ")
     public boolean isPublicRole() {
         return role == Role.STUDENT || role == Role.TEACHER;
     }
