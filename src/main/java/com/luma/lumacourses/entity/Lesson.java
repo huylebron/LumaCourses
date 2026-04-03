@@ -10,6 +10,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -27,6 +28,12 @@ import java.time.LocalDateTime;
 @Entity
 @Table(
         name = "lessons",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_lessons_course_order_index",
+                        columnNames = {"course_id", "order_index"}
+                )
+        },
         indexes = {
                 @Index(name = "idx_lessons_course_id", columnList = "course_id"),
                 @Index(name = "idx_lessons_order_index", columnList = "order_index")

@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/courses")
 @RequiredArgsConstructor
-@Tag(name = "Courses", description = "Course catalog management with role-based visibility")
+@Tag(name = "Courses", description = "Course  management ")
 public class CourseController {
 
     private final CourseService courseService;
@@ -48,7 +48,7 @@ public class CourseController {
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "List courses (AUTH)", description = "Returns paginated courses with optional search/filter and role-based visibility.")
     @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Courses retrieved"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Courses successfully"),
 
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthenticated")
     })
@@ -79,7 +79,7 @@ public class CourseController {
 
     @GetMapping("/{courseId}")
     @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Get course detail (AUTH)", description = "Returns course detail with published lessons according to role visibility rules.")
+    @Operation(summary = "Get course detail (AUTH)", description = "Returns course detail ")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Course retrieved"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Forbidden"),
@@ -94,7 +94,7 @@ public class CourseController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Create course (ADMIN)", description = "Creates a new course with default status DRAFT.")
+    @Operation(summary = "Create course (ADMIN)", description = "Creates  new course witth status DRAFT.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Course created"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Teacher not found"),
@@ -109,7 +109,7 @@ public class CourseController {
 
     @PutMapping("/{courseId}")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Update course (ADMIN)", description = "Partially updates a course. Only non-null fields are applied.")
+    @Operation(summary = "Update course (ADMIN)")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Course updated"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Course/teacher not found"),
@@ -124,7 +124,7 @@ public class CourseController {
 
     @PutMapping("/{courseId}/status")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Update course status (ADMIN)", description = "Updates status of a course (DRAFT/PUBLISHED/ARCHIVED).")
+    @Operation(summary = "Update course status (ADMIN)", description = "Updates status  course (DRAFT/PUBLISHED/ARCHIVED).")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Status updated"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Course not found"),
@@ -139,7 +139,7 @@ public class CourseController {
 
     @DeleteMapping("/{courseId}")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Delete course (ADMIN, soft delete)", description = "Soft-deletes a course by setting status to ARCHIVED.")
+    @Operation(summary = "Delete course (ADMIN)", description = "Soft-deletes ")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Course archived"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Course not found")

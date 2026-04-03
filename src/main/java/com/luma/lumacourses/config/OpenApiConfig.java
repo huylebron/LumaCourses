@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
         info = @Info(
                 title = "LumaCourses API",
                 version = "v1",
-                description = "REST API for LumaCourses e-learning platform"
+                description = "lumaCourses api "
         )
 )
 @SecurityScheme(
@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
         type = SecuritySchemeType.HTTP,
         scheme = "bearer",
         bearerFormat = "JWT",
-        description = "Enter JWT access token obtained from POST /api/auth/login"
+        description = " JWT access token "
 )
 public class OpenApiConfig {
 }

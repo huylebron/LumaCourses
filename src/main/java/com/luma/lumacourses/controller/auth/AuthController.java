@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "Authentication", description = "Login · Verify · Profile · Logout · Refresh")
+@Tag(name = "Authentication", description = "Login -> verify -> logout -> Refresh")
 public class AuthController {
 
     private final AuthService authService;
@@ -50,11 +50,11 @@ public class AuthController {
      */
     @GetMapping("/me")
     @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Get my profile", description = "Returns full profile of the authenticated user")
+    @Operation(summary = "Get my profile", description = "Returns full profile ")
     public ResponseEntity<ApiResponse<MeResponse>> me(
             @AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok(
-                ApiResponse.success(authService.me(principal), "Profile retrieved"));
+                ApiResponse.success(authService.me(principal), "Profile show completely"));
     }
 
     /**
@@ -63,7 +63,7 @@ public class AuthController {
      */
     @PostMapping("/logout")
     @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Logout", description = "Invalidate access token blacklist + revoke refresh token")
+    @Operation(summary = "Logout", description = " access token blacklist + revoke refresh token")
     public ResponseEntity<ApiResponse<Void>> logout(
             @RequestHeader("Authorization") String authHeader,
             @Valid @RequestBody LogoutRequest request) {
@@ -78,10 +78,10 @@ public class AuthController {
      */
     @PostMapping("/refresh")
     @Operation(summary = "Refresh tokens",
-            description = "Exchange refresh token for new access + refresh token ")
+            description = " new access + refresh token ")
     public ResponseEntity<ApiResponse<LoginResponse>> refresh(
             @Valid @RequestBody RefreshRequest request) {
         return ResponseEntity.ok(
-                ApiResponse.success(authService.refresh(request), "Tokens refreshed successfully"));
+                ApiResponse.success(authService.refresh(request), "Tokens refresh successfully"));
     }
 }

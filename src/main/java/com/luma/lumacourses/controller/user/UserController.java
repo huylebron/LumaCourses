@@ -42,16 +42,16 @@ public class UserController {
      */
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "List users (ADMIN)", description = "Returns a paginated list of all users. Supports optional filtering by `role` (ADMIN/TEACHER/STUDENT) and `active` status.", parameters = {
+    @Operation(summary = "List users (ADMIN)", parameters = {
             @Parameter(name = "role", description = "Filter by role (ADMIN, TEACHER, STUDENT)", example = "TEACHER"),
-            @Parameter(name = "active", description = "Filter by active status (true/false)", example = "true"),
-            @Parameter(name = "page", description = "Page number (0-based)", example = "0"),
+            @Parameter(name = "active", description = "Filter by active status", example = "true"),
+            @Parameter(name = "page", description = "Page number", example = "0"),
             @Parameter(name = "size", description = "Page size", example = "10")
     })
     @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "TC-U1: Paginated user list returned"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "TC-U1: Paginate user list "),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "TC-U2: Filtered by role/active"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "TC-U3: Non-admin access → Forbidden")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "TC-U3:  Forbidden")
     })
     public ResponseEntity<ApiResponse<PagedData<UserResponse>>> listUsers(
             @RequestParam(required = false) Role role,
@@ -67,21 +67,21 @@ public class UserController {
                 result.getSize(),
                 result.getTotalPages(),
                 result.getTotalElements());
-        return ResponseEntity.ok(ApiResponse.success(new PagedData<>(result.getContent(), meta), "Users retrieved"));
+        return ResponseEntity.ok(ApiResponse.success(new PagedData<>(result.getContent(), meta), "Users list detail successfully "));
     }
 
     //  GET /api/users/{user_id}
     @GetMapping("/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Get user by ID (ADMIN)", description = "Returns full user details for the specified user ID.")
+    @Operation(summary = "Get user by ID (ADMIN)", description = "Returns full user details with userID .")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "TC-U4: User found"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "TC-U5: User not found"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "TC-U6: Non-admin → Forbidden")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "TC-U6: Forbidden")
     })
     public ResponseEntity<ApiResponse<UserResponse>> getUserById(
             @PathVariable Long userId) {
-        return ResponseEntity.ok(ApiResponse.success(userService.getUserById(userId), "User retrieved"));
+        return ResponseEntity.ok(ApiResponse.success(userService.getUserById(userId), "User detail successfully "));
     }
 
     // POST /api/users/register
@@ -100,7 +100,7 @@ public class UserController {
             @Valid @RequestBody UserRegisterRequest request) {
         UserResponse created = userService.registerUser(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(created, "User registered successfully"));
+                .body(ApiResponse.success(created, "User register successfully"));
     }
 
     //  PUT /api/users/{user_id
@@ -108,11 +108,11 @@ public class UserController {
 
     @PutMapping("/{userId}")
     @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Update user profile (OWNER or ADMIN)", description = "Update profile fields (username, email, fullName). Only non-null fields are applied. Owner or ADMIN only.")
+    @Operation(summary = "Update user profile (OWNER or ADMIN)", description = "Update profile fields (username, email, fullName)")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "TC-U10: Owner updates own profile"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "TC-U11: ADMIN updates any profile"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "TC-U12: Non-owner/non-admin → Forbidden")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "TC-U12: Forbidden")
     })
     public ResponseEntity<ApiResponse<UserResponse>> updateProfile(
             @PathVariable Long userId,
@@ -127,11 +127,11 @@ public class UserController {
 
     @PutMapping("/{userId}/password")
     @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Change password (OWNER or ADMIN)", description = "Change the user's password. When the owner calls this endpoint, `currentPassword` is verified. ADMIN can bypass the current password check.")
+    @Operation(summary = "Change password (OWNER or ADMIN)", description = "Change the user's password.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "TC-U13: Owner changes own password successfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "TC-U14: Wrong currentPassword"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "TC-U15: ADMIN bypasses currentPassword check")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "TC-U15: ADMIN bypass currentPassword ")
     })
     public ResponseEntity<ApiResponse<Void>> changePassword(
             @PathVariable Long userId,
@@ -148,7 +148,7 @@ public class UserController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "TC-U16: Role updated successfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "TC-U17: Attempting to change another ADMIN's role"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "TC-U18: Non-admin token → Forbidden")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "TC-U18:  Forbidden")
     })
     public ResponseEntity<ApiResponse<UserResponse>> updateRole(
             @PathVariable Long userId,
@@ -163,7 +163,7 @@ public class UserController {
 
     @PutMapping("/{userId}/status")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Enable/disable user (ADMIN)", description = "Toggle the `is_active` flag of a user account.")
+    @Operation(summary = "Enable/disable user (ADMIN)")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "TC-U19: User disabled → active=false"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "TC-U20: User enabled → active=true"),
