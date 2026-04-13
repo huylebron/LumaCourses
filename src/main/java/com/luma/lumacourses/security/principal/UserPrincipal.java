@@ -1,14 +1,16 @@
 package com.luma.lumacourses.security.principal;
 
-import com.luma.lumacourses.util.enums.Role;
-import com.luma.lumacourses.entity.User;
-import lombok.Getter;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import com.luma.lumacourses.entity.User;
+import com.luma.lumacourses.util.enums.Role;
+
+import lombok.Getter;
 
 /**
  * Wraps {@link User} entity as Spring Security's UserDetails.
