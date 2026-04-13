@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
     @Query("""
@@ -35,4 +37,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
                                     @Param("role") Role role,
                                     @Param("principalUserId") Long principalUserId,
                                     Pageable pageable);
+
+    List<Course> findByTeacherIdOrderByCreatedAtDesc(Long teacherId);
+
+    List<Course> findAllByOrderByCreatedAtDesc();
 }
